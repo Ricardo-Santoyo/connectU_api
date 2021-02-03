@@ -7,7 +7,6 @@ module ApiHelpers
   def login_with_api(user)
     post '/api/login', params: {
       user: {
-        name: user.name,
         email: user.email,
         password: user.password
       }

@@ -2,7 +2,9 @@ Rails.application.routes.draw do
   default_url_options :host => "localhost"
 
   namespace :api, defaults: { format: :json } do
-    resources :users, only: [:show]
+    resources :users, only: [:show] do
+      resources :posts, only: [:index, :show, :create, :destroy]
+    end
   end
 
   devise_for :users,
