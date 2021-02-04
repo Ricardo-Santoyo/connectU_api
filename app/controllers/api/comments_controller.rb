@@ -16,6 +16,11 @@ class Api::CommentsController < Api::BaseController
     end
   end
 
+  def show
+    @comment = Comment.find(params[:id])
+    render json: {data: @comment}, status: :ok
+  end
+
   private
 
   def get_post

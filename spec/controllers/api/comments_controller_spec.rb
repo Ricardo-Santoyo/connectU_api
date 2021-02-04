@@ -92,4 +92,45 @@ describe Api::CommentsController, type: :request do
       expect(json['data'][2]['post_id']).to be(@post1.id)
     end
   end
+
+  context 'When fetching a comment from a post' do
+    before :each do
+      @post1 = create_post(user)
+      @post2 = create_post(user)
+      create_comment(create_user, @post1)
+      create_comment(create_user, @post2)
+      create_comment(create_user, @post2)
+      @comment = create_comment(user, @post2)
+      create_comment(user, @post1)
+
+      login_with_api(user)
+      get "/api/comments/#{@comment.id}", headers: {
+        'Authorization': response.headers['Authorization']
+      }
+    end
+
+    it 'returns 200' do
+      expect(response.status).to eq(200)
+    end
+
+    it 'only returns the specified comment' do
+      expect(json['data']['user_id']).to be(user.id)
+      expect(json['data']['post_id']).to be(@post2.id)
+      expect(json['data']['body']).to eq(@comment.body)
+    end
+  end
+
+  context 'When a comment is missing' do
+    before do
+      login_with_api(user)
+
+      get "/api/comments/1", headers: {
+        'Authorization': response.headers['Authorization']
+      }
+    end
+
+    it 'returns 404' do
+      expect(response.status).to eq(404)
+    end
+  end
 end
