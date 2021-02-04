@@ -7,6 +7,8 @@ Rails.application.routes.draw do
     end
 
     resources :comments, only: [:index, :show, :create, :destroy]
+
+    resources :likes, only: [:create, :destroy]
   end
 
   devise_for :users,
