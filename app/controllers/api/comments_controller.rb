@@ -21,6 +21,17 @@ class Api::CommentsController < Api::BaseController
     render json: {data: @comment}, status: :ok
   end
 
+  def destroy
+    @comment = Comment.find(params[:id])
+    if @comment.user_id == current_user.id
+      if @comment.destroy
+        render json: {data: @comment}, status: :ok
+      end
+    else
+      render json: {title: 'Unauthorized'}, status: 401
+    end
+  end
+
   private
 
   def get_post

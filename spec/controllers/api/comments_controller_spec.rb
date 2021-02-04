@@ -133,4 +133,44 @@ describe Api::CommentsController, type: :request do
       expect(response.status).to eq(404)
     end
   end
+
+  context 'When deleting a comment' do
+    before do
+      login_with_api(user)
+      @post = create_post(user)
+      @comment = create_comment(user, @post)
+      create_comment(create_user, @post)
+
+      delete "/api/comments/#{@comment.id}", headers: {
+        'Authorization': response.headers['Authorization']
+      }
+    end
+
+    it 'returns 200' do
+      expect(response.status).to eq(200)
+    end
+
+    it 'returns the deleted post' do
+      expect(json['data']['user_id']).to be(user.id)
+      expect(json['data']['post_id']).to be(@post.id)
+      expect(json['data']['body']).to eq(@comment.body)
+    end
+  end
+
+  context 'When trying to delete another user\'s comment' do
+    before do
+      login_with_api(user)
+      @post = create_post(user)
+      create_comment(user, @post)
+      @comment = create_comment(create_user, @post)
+
+      delete "/api/comments/#{@comment.id}", headers: {
+        'Authorization': response.headers['Authorization']
+      }
+    end
+
+    it 'returns 401' do
+      expect(response.status).to eq(401)
+    end
+  end
 end
