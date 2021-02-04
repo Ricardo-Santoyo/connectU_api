@@ -13,8 +13,7 @@ describe Api::PostsController, type: :request do
         'Authorization': response.headers['Authorization']
       }, params: {
         post: {
-          body: @body,
-          user_id: user.id
+          body: @body
         }
       }
     end
@@ -38,8 +37,7 @@ describe Api::PostsController, type: :request do
         'Authorization': response.headers['Authorization']
       }, params: {
         post: {
-          body: @body,
-          user_id: user.id
+          body: @body
         }
       }
     end

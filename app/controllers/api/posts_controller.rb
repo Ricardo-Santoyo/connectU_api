@@ -1,6 +1,6 @@
 class Api::PostsController < Api::BaseController
 
-  before_action :get_user, only: [:index, :show, :destroy]
+  before_action :get_user, only: [:index, :show, :create, :destroy]
 
   def index
     @posts = @user.posts
@@ -8,8 +8,8 @@ class Api::PostsController < Api::BaseController
   end
 
   def create
-    @post = Post.new(post_params)
-    if @post.user_id == current_user.id
+    @post = @user.posts.build(post_params)
+    if @user.id == current_user.id
       if @post.save
         render json: {data: @post}, status: :ok
       end
@@ -53,7 +53,7 @@ class Api::PostsController < Api::BaseController
   end
 
   def post_params
-    params.require(:post).permit(:body, :user_id)
+    params.require(:post).permit(:body)
   end
 
 end
