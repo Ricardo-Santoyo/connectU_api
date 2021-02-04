@@ -70,6 +70,8 @@ RSpec.configure do |config|
 
   config.include PostHelpers
 
+  config.include CommentHelpers
+
   config.include ApiHelpers
 
   config.include JSONAPI::RSpec
