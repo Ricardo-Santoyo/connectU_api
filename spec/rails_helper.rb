@@ -74,6 +74,8 @@ RSpec.configure do |config|
 
   config.include LikeHelpers
 
+  config.include FollowerFolloweeHelpers
+
   config.include ApiHelpers
 
   config.include JSONAPI::RSpec
