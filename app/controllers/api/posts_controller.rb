@@ -4,14 +4,14 @@ class Api::PostsController < Api::BaseController
 
   def index
     @posts = @user.posts
-    render json: {data: @posts}, status: :ok
+    render json: {data: @posts.as_json(methods: :user_name)}, status: :ok
   end
 
   def create
     @post = @user.posts.build(post_params)
     if @user.id == current_user.id
       if @post.save
-        render json: {data: @post}, status: :ok
+        render json: {data: @post.as_json(methods: :user_name)}, status: :ok
       end
     else
       render json: {title: 'Unauthorized'}, status: 401
@@ -23,7 +23,7 @@ class Api::PostsController < Api::BaseController
     if @post == nil
       render json: {title:'Not Found'}, status: 404
     else
-      render json: {data: @post}, status: :ok
+      render json: {data: @post.as_json(methods: :user_name)}, status: :ok
     end
   end
 
