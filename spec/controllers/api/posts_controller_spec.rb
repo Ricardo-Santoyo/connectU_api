@@ -99,6 +99,66 @@ describe Api::PostsController, type: :request do
     end
   end
 
+  context 'When fetching all posts from a user including followees' do
+    before :each do
+      @user2 = create_user
+      user.following.create(person_id:@user2.id)
+      create_post(user)
+      create_post(@user2)
+      create_post(user)
+      create_post(user)
+      login_with_api(user)
+      get "/api/users/#{user.id}/posts", headers: {
+        'Authorization': response.headers['Authorization']
+      }, params: {
+        include_followees: true
+      }
+    end
+
+    it 'returns 200' do
+      expect(response.status).to eq(200)
+    end
+
+    it 'returns the posts in reverse chronological order' do
+      expect(json['data'].length()).to be(4)
+      expect(json['data'][0]['user_name']).to eq(user.name)
+      expect(json['data'][1]['user_name']).to eq(user.name)
+      expect(json['data'][2]['user_name']).to eq(@user2.name)
+      expect(json['data'][3]['user_name']).to eq(user.name)
+      expect(json['data'][0]['user_id']).to be(user.id)
+      expect(json['data'][1]['user_id']).to be(user.id)
+      expect(json['data'][2]['user_id']).to be(@user2.id)
+      expect(json['data'][3]['user_id']).to be(user.id)
+    end
+  end
+
+  context 'When trying to fetch all posts from another user including followees' do
+    before :each do
+      @user2 = create_user
+      @user2.following.create(person_id: user.id)
+      create_post(user)
+      create_post(@user2)
+      create_post(user)
+      create_post(user)
+      login_with_api(user)
+      get "/api/users/#{@user2.id}/posts", headers: {
+        'Authorization': response.headers['Authorization']
+      }, params: {
+        include_followees: true
+      }
+    end
+
+    it 'returns 200' do
+      expect(response.status).to eq(200)
+    end
+
+    it 'only returns the specified user\'s posts' do
+      expect(json['data'].length()).to be(1)
+      expect(json['data'][0]['user_name']).to eq(@user2.name)
+      expect(json['data'][0]['user_id']).to be(@user2.id)
+    end
+  end
+
   context 'When fetching a post from a user' do
     before :each do
       create_post(create_user)

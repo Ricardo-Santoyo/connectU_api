@@ -3,7 +3,12 @@ class Api::PostsController < Api::BaseController
   before_action :get_user, only: [:index, :show, :create, :destroy]
 
   def index
-    @posts = @user.posts
+    if params[:include_followees] && @user.id == current_user.id
+      ids = @user.following.pluck(:person_id) << @user.id
+      @posts = Post.where(user_id: ids).order(id: :desc).limit(20)
+    else
+      @posts = @user.posts.order(id: :desc).limit(20)
+    end
     render json: {data: @posts.as_json(methods: :user_name)}, status: :ok
   end
 
