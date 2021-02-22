@@ -24,6 +24,7 @@ describe Api::PostsController, type: :request do
 
     it 'returns the post' do
       expect(json['data']['user_name']).to eq(user.name)
+      expect(json['data']['user_handle']).to eq(user.handle)
       expect(json['data']['user_id']).to be(user.id)
       expect(json['data']['body']).to eq(@body)
     end
@@ -67,6 +68,7 @@ describe Api::PostsController, type: :request do
     it 'only returns the specified user\'s posts' do
       expect(json['data'].length()).to be(3)
       expect(json['data'][1]['user_name']).to eq(user.name)
+      expect(json['data'][1]['user_handle']).to eq(user.handle)
       expect(json['data'][0]['user_id']).to be(user.id)
       expect(json['data'][1]['user_id']).to be(user.id)
       expect(json['data'][2]['user_id']).to be(user.id)
@@ -93,6 +95,7 @@ describe Api::PostsController, type: :request do
     it 'only returns the specified user\'s posts' do
       expect(json['data'].length()).to be(3)
       expect(json['data'][0]['user_name']).to eq(@user2.name)
+      expect(json['data'][0]['user_handle']).to eq(@user2.handle)
       expect(json['data'][0]['user_id']).to be(@user2.id)
       expect(json['data'][1]['user_id']).to be(@user2.id)
       expect(json['data'][2]['user_id']).to be(@user2.id)
@@ -121,6 +124,10 @@ describe Api::PostsController, type: :request do
 
     it 'returns the posts in reverse chronological order' do
       expect(json['data'].length()).to be(4)
+      expect(json['data'][0]['user_handle']).to eq(user.handle)
+      expect(json['data'][1]['user_handle']).to eq(user.handle)
+      expect(json['data'][2]['user_handle']).to eq(@user2.handle)
+      expect(json['data'][3]['user_handle']).to eq(user.handle)
       expect(json['data'][0]['user_name']).to eq(user.name)
       expect(json['data'][1]['user_name']).to eq(user.name)
       expect(json['data'][2]['user_name']).to eq(@user2.name)
@@ -154,6 +161,7 @@ describe Api::PostsController, type: :request do
 
     it 'only returns the specified user\'s posts' do
       expect(json['data'].length()).to be(1)
+      expect(json['data'][0]['user_handle']).to eq(@user2.handle)
       expect(json['data'][0]['user_name']).to eq(@user2.name)
       expect(json['data'][0]['user_id']).to be(@user2.id)
     end
@@ -175,6 +183,7 @@ describe Api::PostsController, type: :request do
     end
 
     it 'only returns the specified post' do
+      expect(json['data']['user_handle']).to eq(user.handle)
       expect(json['data']['user_name']).to eq(user.name)
       expect(json['data']['user_id']).to be(user.id)
       expect(json['data']['body']).to eq(@post.body)
@@ -198,6 +207,7 @@ describe Api::PostsController, type: :request do
     end
 
     it 'only returns the specified post' do
+      expect(json['data']['user_handle']).to eq(@user2.handle)
       expect(json['data']['user_name']).to eq(@user2.name)
       expect(json['data']['user_id']).to be(@user2.id)
       expect(json['data']['body']).to eq(@post.body)

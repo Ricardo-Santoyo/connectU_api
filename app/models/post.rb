@@ -9,4 +9,8 @@ class Post < ApplicationRecord
   def user_name
     return self.user.name
   end
+
+  def user_handle
+    return self.user.handle
+  end
 end
