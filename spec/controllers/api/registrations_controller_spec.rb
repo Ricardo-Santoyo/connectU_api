@@ -32,6 +32,10 @@ describe RegistrationsController, type: :request do
     it 'returns the user email' do
       expect(json['data']).to have_attribute(:email).with_value(user.email)
     end
+
+    it 'returns the user handle' do
+      expect(json['data']).to have_attribute(:handle)
+    end
   end
 
   context 'When an email already exists' do
