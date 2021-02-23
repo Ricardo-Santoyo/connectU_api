@@ -28,6 +28,7 @@ describe Api::PostsController, type: :request do
       expect(json['data']['user_id']).to be(user.id)
       expect(json['data']['body']).to eq(@body)
       expect(json['data']['comment_count']).to be(0)
+      expect(json['data']['like_count']).to be(0)
     end
   end
 
@@ -71,6 +72,7 @@ describe Api::PostsController, type: :request do
       expect(json['data'][1]['user_name']).to eq(user.name)
       expect(json['data'][1]['user_handle']).to eq(user.handle)
       expect(json['data'][1]['comment_count']).to be(0)
+      expect(json['data'][1]['like_count']).to be(0)
       expect(json['data'][0]['user_id']).to be(user.id)
       expect(json['data'][1]['user_id']).to be(user.id)
       expect(json['data'][2]['user_id']).to be(user.id)
@@ -99,6 +101,7 @@ describe Api::PostsController, type: :request do
       expect(json['data'][0]['user_name']).to eq(@user2.name)
       expect(json['data'][0]['user_handle']).to eq(@user2.handle)
       expect(json['data'][0]['comment_count']).to be(0)
+      expect(json['data'][0]['like_count']).to be(0)
       expect(json['data'][0]['user_id']).to be(@user2.id)
       expect(json['data'][1]['user_id']).to be(@user2.id)
       expect(json['data'][2]['user_id']).to be(@user2.id)
@@ -132,6 +135,7 @@ describe Api::PostsController, type: :request do
       expect(json['data'][2]['user_handle']).to eq(@user2.handle)
       expect(json['data'][3]['user_handle']).to eq(user.handle)
       expect(json['data'][3]['comment_count']).to be(0)
+      expect(json['data'][3]['like_count']).to be(0)
       expect(json['data'][0]['user_name']).to eq(user.name)
       expect(json['data'][1]['user_name']).to eq(user.name)
       expect(json['data'][2]['user_name']).to eq(@user2.name)
@@ -169,6 +173,7 @@ describe Api::PostsController, type: :request do
       expect(json['data'][0]['user_name']).to eq(@user2.name)
       expect(json['data'][0]['user_id']).to be(@user2.id)
       expect(json['data'][0]['comment_count']).to be(0)
+      expect(json['data'][0]['like_count']).to be(0)
     end
   end
 
@@ -192,6 +197,7 @@ describe Api::PostsController, type: :request do
       expect(json['data']['user_name']).to eq(user.name)
       expect(json['data']['user_id']).to be(user.id)
       expect(json['data']['comment_count']).to be(0)
+      expect(json['data']['like_count']).to be(0)
       expect(json['data']['body']).to eq(@post.body)
     end
   end
@@ -217,6 +223,7 @@ describe Api::PostsController, type: :request do
       expect(json['data']['user_name']).to eq(@user2.name)
       expect(json['data']['user_id']).to be(@user2.id)
       expect(json['data']['comment_count']).to be(0)
+      expect(json['data']['like_count']).to be(0)
       expect(json['data']['body']).to eq(@post.body)
     end
   end

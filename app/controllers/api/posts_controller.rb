@@ -9,14 +9,14 @@ class Api::PostsController < Api::BaseController
     else
       @posts = @user.posts.order(id: :desc).limit(20)
     end
-    render json: {data: @posts.as_json(methods: [:user_name, :user_handle, :comment_count])}, status: :ok
+    render json: {data: include_post_info(@posts)}, status: :ok
   end
 
   def create
     @post = @user.posts.build(post_params)
     if @user.id == current_user.id
       if @post.save
-        render json: {data: @post.as_json(methods: [:user_name, :user_handle, :comment_count])}, status: :ok
+        render json: {data: include_post_info(@post)}, status: :ok
       end
     else
       render json: {title: 'Unauthorized'}, status: 401
@@ -28,7 +28,7 @@ class Api::PostsController < Api::BaseController
     if @post == nil
       render json: {title:'Not Found'}, status: 404
     else
-      render json: {data: @post.as_json(methods: [:user_name, :user_handle, :comment_count])}, status: :ok
+      render json: {data: include_post_info(@post)}, status: :ok
     end
   end
 
@@ -48,6 +48,10 @@ class Api::PostsController < Api::BaseController
   end
 
   private
+
+  def include_post_info(data)
+    return data.as_json(methods: [:user_name, :user_handle, :comment_count, :like_count])
+  end
 
   def get_user
     @user = User.find(params[:user_id])
