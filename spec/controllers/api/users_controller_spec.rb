@@ -24,6 +24,26 @@ describe Api::UsersController, type: :request do
     end
   end
 
+  context 'When fetching a user with user handle' do
+    before do
+      login_with_api(user)
+      get "/api/users/#{user.handle}", headers: {
+        'Authorization': response.headers['Authorization']
+      }
+    end
+
+    it 'returns 200' do
+      expect(response.status).to eq(200)
+    end
+
+    it 'returns the user' do
+      expect(json['data']).to have_id(user.id.to_s)
+      expect(json['data']).to have_type('users')
+      expect(json['data']['attributes']['following_count']).to be(0)
+      expect(json['data']['attributes']['followers_count']).to be(0)
+    end
+  end
+
   context 'When a user is missing' do
     before do
       login_with_api(user)

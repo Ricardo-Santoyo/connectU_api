@@ -9,7 +9,10 @@ class Api::UsersController < Api::BaseController
   private
 
   def find_user
-    @user = User.find(params[:id])
+    @user = User.find_by_handle(params[:id])
+    if !@user
+      @user = User.find(params[:id])
+    end
   end
 
 end
