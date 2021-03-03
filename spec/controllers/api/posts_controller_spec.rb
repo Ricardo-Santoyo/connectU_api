@@ -79,6 +79,34 @@ describe Api::PostsController, type: :request do
     end
   end
 
+  context 'When fetching all posts from a user using their handle' do
+    before :each do
+      create_post(create_user)
+      create_post(user)
+      create_post(user)
+      create_post(user)
+      login_with_api(user)
+      get "/api/users/#{user.handle}/posts", headers: {
+        'Authorization': response.headers['Authorization']
+      }
+    end
+
+    it 'returns 200' do
+      expect(response.status).to eq(200)
+    end
+
+    it 'only returns the specified user\'s posts' do
+      expect(json['data'].length()).to be(3)
+      expect(json['data'][1]['user_name']).to eq(user.name)
+      expect(json['data'][1]['user_handle']).to eq(user.handle)
+      expect(json['data'][1]['comment_count']).to be(0)
+      expect(json['data'][1]['like_count']).to be(0)
+      expect(json['data'][0]['user_id']).to be(user.id)
+      expect(json['data'][1]['user_id']).to be(user.id)
+      expect(json['data'][2]['user_id']).to be(user.id)
+    end
+  end
+
   context 'When fetching all posts from another user' do
     before :each do
       @user2 = create_user
@@ -184,6 +212,31 @@ describe Api::PostsController, type: :request do
       @post = create_post(user)
       login_with_api(user)
       get "/api/users/#{user.id}/posts/2", headers: {
+        'Authorization': response.headers['Authorization']
+      }
+    end
+
+    it 'returns 200' do
+      expect(response.status).to eq(200)
+    end
+
+    it 'only returns the specified post' do
+      expect(json['data']['user_handle']).to eq(user.handle)
+      expect(json['data']['user_name']).to eq(user.name)
+      expect(json['data']['user_id']).to be(user.id)
+      expect(json['data']['comment_count']).to be(0)
+      expect(json['data']['like_count']).to be(0)
+      expect(json['data']['body']).to eq(@post.body)
+    end
+  end
+
+  context 'When fetching a post from a user using their handle' do
+    before :each do
+      create_post(create_user)
+      create_post(user)
+      @post = create_post(user)
+      login_with_api(user)
+      get "/api/users/#{user.handle}/posts/2", headers: {
         'Authorization': response.headers['Authorization']
       }
     end
