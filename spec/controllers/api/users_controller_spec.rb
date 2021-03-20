@@ -66,4 +66,26 @@ describe Api::UsersController, type: :request do
       expect(response.status).to eq(401)
     end
   end
+
+  context 'When fetching users' do
+    before do
+      login_with_api(user)
+      create_user
+      create_user
+      create_user
+      create_user
+      get "/api/users", headers: {
+        'Authorization': response.headers['Authorization']
+      }
+    end
+
+    it 'returns 200' do
+      expect(response.status).to eq(200)
+    end
+
+    it 'returns the users' do
+      expect(json['data'][0]['id']).to be(user.id)
+      expect(json['data'].length()).to be(5)
+    end
+  end
 end
