@@ -3,6 +3,7 @@ class Post < ApplicationRecord
   belongs_to :user
   has_many :comments, dependent: :destroy
   has_many :likes, dependent: :destroy
+  attr_accessor :uid
 
   private
 
@@ -20,5 +21,9 @@ class Post < ApplicationRecord
 
   def like_count
     return self.likes.count
+  end
+
+  def like_id
+    return self.likes.where(user_id:uid).ids.first
   end
 end

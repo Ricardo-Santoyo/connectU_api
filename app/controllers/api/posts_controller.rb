@@ -9,7 +9,7 @@ class Api::PostsController < Api::BaseController
     else
       @posts = @user.posts.order(id: :desc).limit(20)
     end
-    render json: {data: include_post_info(@posts)}, status: :ok
+    render json: {data: include_post_info(@posts, "index")}, status: :ok
   end
 
   def create
@@ -28,7 +28,7 @@ class Api::PostsController < Api::BaseController
     if @post == nil
       render json: {title:'Not Found'}, status: 404
     else
-      render json: {data: include_post_info(@post)}, status: :ok
+      render json: {data: include_post_info(@post, true)}, status: :ok
     end
   end
 
@@ -49,8 +49,19 @@ class Api::PostsController < Api::BaseController
 
   private
 
-  def include_post_info(data)
-    return data.as_json(methods: [:user_name, :user_handle, :comment_count, :like_count])
+  def include_post_info(data, like_id = nil)
+    if like_id
+      if like_id == "index"
+        data.each do |post|
+          post.uid = current_user.id
+        end
+      else
+        data.uid = current_user.id
+      end
+      return data.as_json(methods: [:user_name, :user_handle, :comment_count, :like_count, :like_id])
+    else
+      return data.as_json(methods: [:user_name, :user_handle, :comment_count, :like_count])
+    end
   end
 
   def get_user

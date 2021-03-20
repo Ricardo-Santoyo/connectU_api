@@ -73,6 +73,7 @@ describe Api::PostsController, type: :request do
       expect(json['data'][1]['user_handle']).to eq(user.handle)
       expect(json['data'][1]['comment_count']).to be(0)
       expect(json['data'][1]['like_count']).to be(0)
+      expect(json['data'][1]['like_id']).to be(nil)
       expect(json['data'][0]['user_id']).to be(user.id)
       expect(json['data'][1]['user_id']).to be(user.id)
       expect(json['data'][2]['user_id']).to be(user.id)
@@ -101,6 +102,7 @@ describe Api::PostsController, type: :request do
       expect(json['data'][1]['user_handle']).to eq(user.handle)
       expect(json['data'][1]['comment_count']).to be(0)
       expect(json['data'][1]['like_count']).to be(0)
+      expect(json['data'][1]['like_id']).to be(nil)
       expect(json['data'][0]['user_id']).to be(user.id)
       expect(json['data'][1]['user_id']).to be(user.id)
       expect(json['data'][2]['user_id']).to be(user.id)
@@ -277,6 +279,7 @@ describe Api::PostsController, type: :request do
       expect(json['data']['user_id']).to be(@user2.id)
       expect(json['data']['comment_count']).to be(0)
       expect(json['data']['like_count']).to be(0)
+      expect(json['data']['like_id']).to be(nil)
       expect(json['data']['body']).to eq(@post.body)
     end
   end
