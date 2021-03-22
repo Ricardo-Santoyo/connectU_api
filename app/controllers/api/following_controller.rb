@@ -4,6 +4,8 @@ class Api::FollowingController < Api::BaseController
     @following = current_user.following.build(person_id: params[:person_id])
     if @following.save
       render json: {data: @following}, status: :ok
+    else
+      render json: {title: 'Duplicate Record'}, status: 400
     end
   end
 

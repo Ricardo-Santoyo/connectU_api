@@ -63,4 +63,22 @@ describe Api::FollowingController, type: :request do
       expect(response.status).to eq(401)
     end
   end
+
+  context 'When trying to create a duplicate following' do
+    before do
+      login_with_api(user)
+      @user2 = create_user
+      @following = create_follower_followee(@user2, user)
+
+      post "/api/following", headers: {
+        'Authorization': response.headers['Authorization']
+      }, params: {
+        person_id: @user2.id
+      }
+    end
+
+    it 'returns 400' do
+      expect(response.status).to eq(400)
+    end
+  end
 end
