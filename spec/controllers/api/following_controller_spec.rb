@@ -25,15 +25,14 @@ describe Api::FollowingController, type: :request do
       expect(json['data']['person_id']).to be(@user2.id)
     end
   end
-=begin
-  context 'When deleting a like' do
+
+  context 'When unfollowing a user' do
     before do
       login_with_api(user)
-      @post = create_post(user)
-      @like = create_like(user, @post)
-      create_like(create_user, @post)
+      @user2 = create_user
+      @following = create_follower_followee(@user2, user)
 
-      delete "/api/likes/#{@like.id}", headers: {
+      delete "/api/following/#{@following.id}", headers: {
         'Authorization': response.headers['Authorization']
       }
     end
@@ -42,11 +41,26 @@ describe Api::FollowingController, type: :request do
       expect(response.status).to eq(200)
     end
 
-    it 'returns the deleted like' do
-      expect(json['data']['user_id']).to be(user.id)
-      expect(json['data']['post_id']).to be(@post.id)
-      expect(json['data']['id']).to be(@like.id)
+    it 'returns the unfollowing' do
+      expect(json['data']['follower_id']).to be(user.id)
+      expect(json['data']['person_id']).to be(@user2.id)
+      expect(json['data']['id']).to be(@following.id)
     end
   end
-=end
+
+  context 'When trying to unfollow a diffrent user\'s following' do
+    before do
+      login_with_api(user)
+      @user2 = create_user
+      @following = create_follower_followee(user, @user2)
+
+      delete "/api/following/#{@following.id}", headers: {
+        'Authorization': response.headers['Authorization']
+      }
+    end
+
+    it 'returns 401' do
+      expect(response.status).to eq(401)
+    end
+  end
 end

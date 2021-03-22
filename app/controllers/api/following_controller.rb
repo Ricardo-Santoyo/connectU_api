@@ -8,6 +8,14 @@ class Api::FollowingController < Api::BaseController
   end
 
   def destroy
+    @following = FollowerFollowee.find(params[:id])
+    if @following.follower_id == current_user.id
+      if @following.destroy
+        render json: {data: @following}, status: :ok
+      end
+    else
+      render json: {title: 'Unauthorized'}, status: 401
+    end
   end
 
 end
