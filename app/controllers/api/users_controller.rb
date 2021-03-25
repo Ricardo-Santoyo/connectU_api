@@ -4,7 +4,7 @@ class Api::UsersController < Api::BaseController
 
   def index
     @users = User.all.limit(20)
-    render json: {data: @users}, status: :ok
+    render json: {data: include_follower_followee_info(@users)}, status: :ok
   end
 
   def show
@@ -12,6 +12,13 @@ class Api::UsersController < Api::BaseController
   end
 
   private
+
+  def include_follower_followee_info(data)
+    data.each do |user|
+      user.uid = current_user.id
+    end
+    return data.as_json(methods: [:follower_followee_id])
+  end
 
   def find_user
     @user = User.find_by_handle(params[:id])

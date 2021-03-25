@@ -70,7 +70,8 @@ describe Api::UsersController, type: :request do
   context 'When fetching users' do
     before do
       login_with_api(user)
-      create_user
+      @user2 = create_user
+      @following = create_follower_followee(@user2, user)
       create_user
       create_user
       create_user
@@ -85,6 +86,7 @@ describe Api::UsersController, type: :request do
 
     it 'returns the users' do
       expect(json['data'][0]['id']).to be(user.id)
+      expect(json['data'][1]['follower_followee_id']).to be(@following.id)
       expect(json['data'].length()).to be(5)
     end
   end

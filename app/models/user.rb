@@ -11,6 +11,7 @@ class User < ApplicationRecord
   has_many :likes, dependent: :destroy
   has_many :followers, foreign_key: :person_id, class_name: 'FollowerFollowee', dependent: :destroy
   has_many :following, foreign_key: :follower_id, class_name:'FollowerFollowee', dependent: :destroy
+  attr_accessor :uid
 
   before_create :create_unique_handle
 
@@ -21,5 +22,9 @@ class User < ApplicationRecord
       self.handle = SecureRandom.alphanumeric(15)
       break unless self.class.exists?(:handle => handle)
     end
+  end
+
+  def follower_followee_id
+    return self.followers.where(follower_id:uid).ids.first
   end
 end
