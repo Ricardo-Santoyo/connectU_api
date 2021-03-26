@@ -15,6 +15,10 @@ class User < ApplicationRecord
 
   before_create :create_unique_handle
 
+  def follower_followee_id
+    return self.followers.where(follower_id:uid).ids.first
+  end
+
   private 
 
   def create_unique_handle
@@ -22,9 +26,5 @@ class User < ApplicationRecord
       self.handle = SecureRandom.alphanumeric(15)
       break unless self.class.exists?(:handle => handle)
     end
-  end
-
-  def follower_followee_id
-    return self.followers.where(follower_id:uid).ids.first
   end
 end

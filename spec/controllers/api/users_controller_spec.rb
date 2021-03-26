@@ -27,7 +27,9 @@ describe Api::UsersController, type: :request do
   context 'When fetching a user with user handle' do
     before do
       login_with_api(user)
-      get "/api/users/#{user.handle}", headers: {
+      @user2 = create_user
+      @following = create_follower_followee(@user2, user)
+      get "/api/users/#{@user2.handle}", headers: {
         'Authorization': response.headers['Authorization']
       }
     end
@@ -37,10 +39,11 @@ describe Api::UsersController, type: :request do
     end
 
     it 'returns the user' do
-      expect(json['data']).to have_id(user.id.to_s)
+      expect(json['data']).to have_id(@user2.id.to_s)
       expect(json['data']).to have_type('users')
       expect(json['data']['attributes']['following_count']).to be(0)
-      expect(json['data']['attributes']['followers_count']).to be(0)
+      expect(json['data']['attributes']['followers_count']).to be(1)
+      expect(json['data']['attributes']['follower_followee_id']).to be(@following.id)
     end
   end
 

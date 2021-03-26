@@ -11,6 +11,10 @@ class SerializableUser < JSONAPI::Serializable::Resource
     @object.followers.count
   end
 
+  attribute :follower_followee_id do
+    @object.follower_followee_id
+  end
+
   link :self do
     @url_helpers.api_user_url(@object.id)
   end

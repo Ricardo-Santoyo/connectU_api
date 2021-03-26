@@ -25,6 +25,7 @@ class Api::UsersController < Api::BaseController
     if !@user
       @user = User.find(params[:id])
     end
+    @user.uid = current_user.id
   end
 
 end
