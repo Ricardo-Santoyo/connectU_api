@@ -6,7 +6,7 @@ class Api::CommentsController < Api::BaseController
     elsif params[:user_id]
       @comments = get_user.comments
     end
-    render json: {data: @comments}, status: :ok
+    render json: {data: include_comment_info(@comments, "index")}, status: :ok
   end
 
   def create
@@ -33,6 +33,17 @@ class Api::CommentsController < Api::BaseController
   end
 
   private
+
+  def include_comment_info(data, action = nil)
+    if action == "index"
+      data.each do |comment|
+        comment.uid = current_user.id
+      end
+    else
+      data.uid = current_user.id
+    end
+    return data.as_json(methods: [:user_name, :user_handle])
+  end
 
   def get_post
     @post = Post.find(params[:post_id])

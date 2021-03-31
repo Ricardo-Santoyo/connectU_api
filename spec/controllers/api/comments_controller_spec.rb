@@ -91,6 +91,14 @@ describe Api::CommentsController, type: :request do
       expect(json['data'][1]['post_id']).to be(@post1.id)
       expect(json['data'][2]['post_id']).to be(@post1.id)
     end
+
+    it 'returns comment info' do
+      expect(json['data'][3]['user_name']).to eq(user.name)
+      expect(json['data'][3]['user_handle']).to eq(user.handle)
+      expect(json['data'][3]['comment_count']).to be(nil)
+      expect(json['data'][3]['like_count']).to be(nil)
+      expect(json['data'][3]['like_id']).to be(nil)
+    end
   end
 
   context 'When fetching a comment from a post' do
