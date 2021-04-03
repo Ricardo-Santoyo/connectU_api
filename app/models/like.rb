@@ -1,6 +1,6 @@
 class Like < ApplicationRecord
-  validates :user_id, :post_id, presence: true
-  validates_uniqueness_of :user_id, scope: :post_id  
+  validates :user_id, :likeable, presence: true
+  validates_uniqueness_of :user_id, scope: :likeable 
   belongs_to :user
-  belongs_to :post
+  belongs_to :likeable, polymorphic: true
 end

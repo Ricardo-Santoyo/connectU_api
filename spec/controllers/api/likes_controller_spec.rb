@@ -12,7 +12,8 @@ describe Api::LikesController, type: :request do
       post "/api/likes", headers: {
         'Authorization': response.headers['Authorization']
       }, params: {
-        post_id: @post.id
+        type: "Post",
+        likeable_id: @post.id
       }
     end
 
@@ -22,7 +23,8 @@ describe Api::LikesController, type: :request do
 
     it 'returns the like' do
       expect(json['data']['user_id']).to be(user.id)
-      expect(json['data']['post_id']).to be(@post.id)
+      expect(json['data']['likeable_id']).to be(@post.id)
+      expect(json['data']['likeable_type']).to eq("Post")
     end
   end
 
@@ -35,7 +37,8 @@ describe Api::LikesController, type: :request do
       post "/api/likes", headers: {
         'Authorization': response.headers['Authorization']
       }, params: {
-        post_id: @post.id
+        type: "Post",
+        likeable_id: @post.id
       }
     end
 
@@ -62,7 +65,8 @@ describe Api::LikesController, type: :request do
 
     it 'returns the deleted like' do
       expect(json['data']['user_id']).to be(user.id)
-      expect(json['data']['post_id']).to be(@post.id)
+      expect(json['data']['likeable_id']).to be(@post.id)
+      expect(json['data']['likeable_type']).to eq("Post")
       expect(json['data']['id']).to be(@like.id)
     end
   end
