@@ -42,7 +42,7 @@ class Api::CommentsController < Api::BaseController
     else
       data.uid = current_user.id
     end
-    return data.as_json(methods: [:user_name, :user_handle])
+    return data.as_json(methods: [:user_name, :user_handle, :like_count])
   end
 
   def get_post

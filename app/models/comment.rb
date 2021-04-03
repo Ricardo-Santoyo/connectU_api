@@ -14,4 +14,8 @@ class Comment < ApplicationRecord
   def user_handle
     return self.user.handle
   end
+
+  def like_count
+    return self.likes.count
+  end
 end
