@@ -14,7 +14,8 @@ describe Api::CommentsController, type: :request do
         'Authorization': response.headers['Authorization']
       }, params: {
         comment: {
-          post_id: @post.id,
+          commentable_type: "Post",
+          commentable_id: @post.id,
           body: @body
         }
       }
@@ -26,7 +27,8 @@ describe Api::CommentsController, type: :request do
 
     it 'returns the comment' do
       expect(json['data']['user_id']).to be(user.id)
-      expect(json['data']['post_id']).to be(@post.id)
+      expect(json['data']['commentable_id']).to be(@post.id)
+      expect(json['data']['commentable_type']).to eq("Post")
       expect(json['data']['body']).to eq(@body)
     end
   end
@@ -55,11 +57,12 @@ describe Api::CommentsController, type: :request do
     it 'only returns the specified user\'s comments' do
       expect(json['data'].length()).to be(3)
       expect(json['data'][0]['user_id']).to be(user.id)
-      expect(json['data'][0]['post_id']).to be(@post1.id)
+      expect(json['data'][0]['commentable_id']).to be(@post1.id)
       expect(json['data'][1]['user_id']).to be(user.id)
-      expect(json['data'][1]['post_id']).to be(@post2.id)
+      expect(json['data'][1]['commentable_id']).to be(@post2.id)
       expect(json['data'][2]['user_id']).to be(user.id)
-      expect(json['data'][2]['post_id']).to be(@post3.id)
+      expect(json['data'][2]['commentable_id']).to be(@post3.id)
+      expect(json['data'][2]['commentable_type']).to eq("Post")
     end
   end
 
@@ -88,9 +91,10 @@ describe Api::CommentsController, type: :request do
 
     it 'only returns the specified post\'s comments' do
       expect(json['data'].length()).to be(4)
-      expect(json['data'][0]['post_id']).to be(@post1.id)
-      expect(json['data'][1]['post_id']).to be(@post1.id)
-      expect(json['data'][2]['post_id']).to be(@post1.id)
+      expect(json['data'][0]['commentable_id']).to be(@post1.id)
+      expect(json['data'][1]['commentable_id']).to be(@post1.id)
+      expect(json['data'][2]['commentable_id']).to be(@post1.id)
+      expect(json['data'][2]['commentable_type']).to eq("Post")
     end
 
     it 'returns comment info' do
@@ -124,7 +128,8 @@ describe Api::CommentsController, type: :request do
 
     it 'only returns the specified comment' do
       expect(json['data']['user_id']).to be(user.id)
-      expect(json['data']['post_id']).to be(@post2.id)
+      expect(json['data']['commentable_id']).to be(@post2.id)
+      expect(json['data']['commentable_type']).to eq("Post")
       expect(json['data']['body']).to eq(@comment.body)
     end
   end
@@ -161,7 +166,8 @@ describe Api::CommentsController, type: :request do
 
     it 'returns the deleted post' do
       expect(json['data']['user_id']).to be(user.id)
-      expect(json['data']['post_id']).to be(@post.id)
+      expect(json['data']['commentable_id']).to be(@post.id)
+      expect(json['data']['commentable_type']).to eq("Post")
       expect(json['data']['body']).to eq(@comment.body)
     end
   end

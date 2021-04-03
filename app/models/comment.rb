@@ -1,7 +1,7 @@
 class Comment < ApplicationRecord
-  validates :body, :user_id, :post_id, presence: true
+  validates :body, :user_id, :commentable, presence: true
   belongs_to :user
-  belongs_to :post
+  belongs_to :commentable, polymorphic: true
   has_many :likes, as: :likeable, dependent: :destroy
   attr_accessor :uid
 
