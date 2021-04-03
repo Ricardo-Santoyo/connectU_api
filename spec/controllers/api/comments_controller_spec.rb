@@ -71,7 +71,8 @@ describe Api::CommentsController, type: :request do
       create_comment(create_user, @post1)
       create_comment(create_user, @post1)
       create_comment(create_user, @post2)
-      create_comment(user, @post1)
+      @comment = create_comment(user, @post1)
+      @like = create_like(user, @comment, "Comment")
 
       login_with_api(user)
       get "/api/comments", headers: {
@@ -96,8 +97,8 @@ describe Api::CommentsController, type: :request do
       expect(json['data'][3]['user_name']).to eq(user.name)
       expect(json['data'][3]['user_handle']).to eq(user.handle)
       expect(json['data'][3]['comment_count']).to be(nil)
-      expect(json['data'][3]['like_count']).to be(0)
-      expect(json['data'][3]['like_id']).to be(nil)
+      expect(json['data'][3]['like_count']).to be(1)
+      expect(json['data'][3]['like_id']).to be(@like.id)
     end
   end
 
