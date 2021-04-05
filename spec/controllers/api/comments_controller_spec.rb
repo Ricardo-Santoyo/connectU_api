@@ -188,4 +188,34 @@ describe Api::CommentsController, type: :request do
       expect(response.status).to eq(401)
     end
   end
+
+  context 'When commenting on a comment' do
+    before do
+      login_with_api(user)
+      @post = create_post(user)
+      @comment = create_comment(user, @post)
+      @body = Faker::Lorem.sentence
+
+      post "/api/comments", headers: {
+        'Authorization': response.headers['Authorization']
+      }, params: {
+        comment: {
+          commentable_type: "Comment",
+          commentable_id: @comment.id,
+          body: @body
+        }
+      }
+    end
+
+    it 'returns 200' do
+      expect(response.status).to eq(200)
+    end
+
+    it 'returns the comment' do
+      expect(json['data']['user_id']).to be(user.id)
+      expect(json['data']['commentable_id']).to be(@comment.id)
+      expect(json['data']['commentable_type']).to eq("Comment")
+      expect(json['data']['body']).to eq(@body)
+    end
+  end
 end
