@@ -12,7 +12,7 @@ describe Api::LikesController, type: :request do
       post "/api/likes", headers: {
         'Authorization': response.headers['Authorization']
       }, params: {
-        type: "Post",
+        type: "post",
         likeable_id: @post.id
       }
     end
