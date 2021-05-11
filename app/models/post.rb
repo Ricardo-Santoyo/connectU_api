@@ -19,6 +19,10 @@ class Post < ApplicationRecord
     return self.comments.count
   end
 
+  def commented
+    return self.comments.exists?(user_id:uid)
+  end
+
   def like_count
     return self.likes.count
   end
