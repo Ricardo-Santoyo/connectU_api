@@ -12,13 +12,13 @@ class Api::CommentsController < Api::BaseController
   def create
     @comment = current_user.comments.build(comment_params)
     if @comment.save
-      render json: {data: @comment}, status: :ok
+      render json: {data: include_comment_info(@comment)}, status: :ok
     end
   end
 
   def show
     @comment = Comment.find(params[:id])
-    render json: {data: @comment}, status: :ok
+    render json: {data: include_comment_info(@comment)}, status: :ok
   end
 
   def destroy

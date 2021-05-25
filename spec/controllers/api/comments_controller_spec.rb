@@ -31,6 +31,15 @@ describe Api::CommentsController, type: :request do
       expect(json['data']['commentable_type']).to eq("Post")
       expect(json['data']['body']).to eq(@body)
     end
+
+    it 'returns comment info' do
+      expect(json['data']['user_name']).to eq(user.name)
+      expect(json['data']['user_handle']).to eq(user.handle)
+      expect(json['data']['comment_count']).to be(0)
+      expect(json['data']['commented']).to eq(false)
+      expect(json['data']['like_count']).to be(0)
+      expect(json['data']['like_id']).to be(nil)
+    end
   end
 
   context 'When fetching all comments from a user' do
@@ -132,6 +141,15 @@ describe Api::CommentsController, type: :request do
       expect(json['data']['commentable_id']).to be(@post2.id)
       expect(json['data']['commentable_type']).to eq("Post")
       expect(json['data']['body']).to eq(@comment.body)
+    end
+
+    it 'returns comment info' do
+      expect(json['data']['user_name']).to eq(user.name)
+      expect(json['data']['user_handle']).to eq(user.handle)
+      expect(json['data']['comment_count']).to be(0)
+      expect(json['data']['commented']).to eq(false)
+      expect(json['data']['like_count']).to be(0)
+      expect(json['data']['like_id']).to be(nil)
     end
   end
 
