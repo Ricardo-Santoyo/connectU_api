@@ -3,6 +3,8 @@ class Api::CommentsController < Api::BaseController
   def index
     if params[:post_id]
       @comments = get_post.comments
+    elsif params[:comment_id]
+      @comments = get_comment.comments
     elsif params[:user_id]
       @comments = get_user.comments
     end
@@ -47,6 +49,10 @@ class Api::CommentsController < Api::BaseController
 
   def get_post
     @post = Post.find(params[:post_id])
+  end
+
+  def get_comment
+    @comment = Comment.find(params[:comment_id])
   end
 
   def get_user

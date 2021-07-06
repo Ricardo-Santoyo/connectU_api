@@ -116,6 +116,37 @@ describe Api::CommentsController, type: :request do
     end
   end
 
+  context 'When fetching all comments from a comment' do
+    before :each do
+      @post = create_post(user)
+      @comment1 = create_comment(create_user, @post)
+      @comment2 = create_comment(create_user, @post)
+      create_comment(create_user, @comment1, "Comment")
+      create_comment(create_user, @comment1, "Comment")
+      create_comment(create_user, @comment1, "Comment")
+      create_comment(create_user, @comment2, "Comment")
+
+      login_with_api(user)
+      get "/api/comments", headers: {
+        'Authorization': response.headers['Authorization']
+      }, params: {
+        comment_id: @comment1.id
+      }
+    end
+
+    it 'returns 200' do
+      expect(response.status).to eq(200)
+    end
+
+    it 'only returns the specified comment\'s comments' do
+      expect(json['data'].length()).to be(3)
+      expect(json['data'][0]['commentable_id']).to be(@comment1.id)
+      expect(json['data'][1]['commentable_id']).to be(@comment1.id)
+      expect(json['data'][2]['commentable_id']).to be(@comment1.id)
+      expect(json['data'][2]['commentable_type']).to eq("Comment")
+    end
+  end
+
   context 'When fetching a comment from a post' do
     before :each do
       @post1 = create_post(user)
