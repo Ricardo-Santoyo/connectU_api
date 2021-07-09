@@ -30,4 +30,8 @@ class Post < ApplicationRecord
   def like_id
     return self.likes.where(user_id:uid).ids.first
   end
+
+  def user_post_id
+    return self.user.posts.find_index(self) + 1
+  end
 end

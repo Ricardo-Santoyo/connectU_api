@@ -106,6 +106,7 @@ describe Api::PostsController, type: :request do
       expect(json['data'][0]['user_id']).to be(user.id)
       expect(json['data'][1]['user_id']).to be(user.id)
       expect(json['data'][2]['user_id']).to be(user.id)
+      expect(json['data'][1]['user_post_id']).to be(2)
     end
   end
 
