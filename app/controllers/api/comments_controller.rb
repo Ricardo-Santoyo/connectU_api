@@ -19,7 +19,11 @@ class Api::CommentsController < Api::BaseController
   end
 
   def show
-    @comment = Comment.find(params[:id])
+    if params[:user_id]
+      @comment = User.find_by_handle(params[:user_id]).comments.limit(params[:id].to_i).last
+    else
+      @comment = Comment.find(params[:id])
+    end
     render json: {data: include_comment_info(@comment)}, status: :ok
   end
 

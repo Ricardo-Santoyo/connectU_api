@@ -184,6 +184,34 @@ describe Api::CommentsController, type: :request do
     end
   end
 
+  context 'When fetching a comment from a user' do
+    before :each do
+      @post1 = create_post(user)
+      create_comment(create_user, @post1)
+      create_comment(create_user, @post1)
+      create_comment(create_user, @post1)
+      @comment = create_comment(user, @post1)
+
+      login_with_api(user)
+      get "/api/comments/1", headers: {
+        'Authorization': response.headers['Authorization']
+      }, params: {
+        user_id: user.handle
+      }
+    end
+
+    it 'returns 200' do
+      expect(response.status).to eq(200)
+    end
+
+    it 'only returns the specified comment' do
+      expect(json['data']['user_id']).to be(user.id)
+      expect(json['data']['commentable_id']).to be(@post1.id)
+      expect(json['data']['commentable_type']).to eq("Post")
+      expect(json['data']['body']).to eq(@comment.body)
+    end
+  end
+
   context 'When a comment is missing' do
     before do
       login_with_api(user)
