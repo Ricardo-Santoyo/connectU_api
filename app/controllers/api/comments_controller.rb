@@ -1,7 +1,9 @@
 class Api::CommentsController < Api::BaseController
 
   def index
-    if params[:post_id]
+    if params[:post_id] and params[:user_id]
+      @comments = User.find_by_handle(params[:user_id]).posts.limit(params[:post_id].to_i).last.comments
+    elsif params[:post_id]
       @comments = get_post.comments
     elsif params[:comment_id] and params[:user_id]
       @comments = User.find_by_handle(params[:user_id]).comments.limit(params[:comment_id].to_i).last.comments
