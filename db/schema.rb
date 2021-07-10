@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_03_222900) do
+ActiveRecord::Schema.define(version: 2021_07_10_004428) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,6 +52,15 @@ ActiveRecord::Schema.define(version: 2021_04_03_222900) do
     t.integer "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "reposts", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "repostable_type"
+    t.bigint "repostable_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["repostable_type", "repostable_id"], name: "index_reposts_on_repostable"
   end
 
   create_table "users", force: :cascade do |t|
