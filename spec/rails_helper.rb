@@ -72,6 +72,8 @@ RSpec.configure do |config|
 
   config.include CommentHelpers
 
+  config.include RepostHelpers
+
   config.include LikeHelpers
 
   config.include FollowerFolloweeHelpers
