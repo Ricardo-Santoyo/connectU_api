@@ -3,16 +3,21 @@ class Api::RepostsController < Api::BaseController
   include PostInfoController
 
   def index
-    get_user
-    @reposts = @user.reposts.order(id: :desc).limit(10)
+    if params[:include_followees]
+      ids = current_user.following.pluck(:person_id) << current_user.id
+      @reposts = Repost.where(user_id: ids).order(id: :desc).limit(20)
+    else
+      get_user
+      @reposts = @user.reposts.order(id: :desc).limit(10)
+    end
     @posts = get_posts(@reposts)
-    render json: {repost: @reposts, data: include_post_info(@posts, "index")}, status: :ok
+    render json: {repost: get_repost_info(@reposts), data: include_post_info(@posts, "index")}, status: :ok
   end
 
   def create
     @repost = current_user.reposts.build(repost_params)
     if @repost.save
-      render json: {repost: @repost, data: include_post_info(@repost.repostable) }
+      render json: {repost: get_repost_info(@repost), data: include_post_info(@repost.repostable) }
     end
   end
 
@@ -20,6 +25,10 @@ class Api::RepostsController < Api::BaseController
   end
 
   private
+
+  def get_repost_info(data)
+    return data.as_json(methods: [:user_name, :user_handle])
+  end
 
   def get_posts(data)
     new_data = []
