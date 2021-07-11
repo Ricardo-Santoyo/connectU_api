@@ -50,13 +50,6 @@ class Api::PostsController < Api::BaseController
 
   private
 
-  def get_user
-    @user = User.find_by_handle(params[:user_id])
-    if !@user
-      @user = User.find(params[:user_id])
-    end
-  end
-
   def get_post
     @post = @user.posts.offset(params[:id].to_i - 1).first
   end

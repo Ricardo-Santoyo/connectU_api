@@ -54,10 +54,6 @@ class Api::CommentsController < Api::BaseController
     @comment = Comment.find(params[:comment_id])
   end
 
-  def get_user
-    @user = User.find(params[:user_id])
-  end
-
   def comment_params
     params[:comment][:commentable_type].capitalize!
     params.require(:comment).permit(:body, :commentable_type, :commentable_id)

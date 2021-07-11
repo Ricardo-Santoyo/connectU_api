@@ -41,4 +41,37 @@ describe Api::RepostsController, type: :request do
       expect(json['data']['like_id']).to be(nil)
     end
   end
+
+  context 'When fetching all reposts from a user' do
+    before :each do
+      create_repost(create_user, create_post(user))
+      create_repost(user, create_post(user))
+      create_repost(user, create_post(user))
+      create_repost(user, create_post(user))
+      login_with_api(user)
+      get "/api/reposts", headers: {
+        'Authorization': response.headers['Authorization']
+      }, params: {
+        user_id: user.handle
+      }
+    end
+
+    it 'returns 200' do
+      expect(response.status).to eq(200)
+    end
+
+    it 'only returns the specified user\'s reposts' do
+      expect(json['data'].length()).to be(3)
+      expect(json['data'][1]['user_name']).to eq(user.name)
+      expect(json['data'][1]['user_handle']).to eq(user.handle)
+      expect(json['data'][1]['comment_count']).to be(0)
+      expect(json['data'][1]['repost_count']).to be(1)
+      expect(json['data'][1]['reposted']).to be(true)
+      expect(json['data'][1]['like_count']).to be(0)
+      expect(json['data'][1]['like_id']).to be(nil)
+      expect(json['data'][0]['user_id']).to be(user.id)
+      expect(json['data'][1]['user_id']).to be(user.id)
+      expect(json['data'][2]['user_id']).to be(user.id)
+    end
+  end
 end

@@ -3,6 +3,10 @@ class Api::RepostsController < Api::BaseController
   include PostInfoController
 
   def index
+    get_user
+    @reposts = @user.reposts.order(id: :desc).limit(10)
+    @posts = get_posts(@reposts)
+    render json: {repost: @reposts, data: include_post_info(@posts, "index")}, status: :ok
   end
 
   def create
@@ -16,6 +20,14 @@ class Api::RepostsController < Api::BaseController
   end
 
   private
+
+  def get_posts(data)
+    new_data = []
+    data.each do |repost|
+      new_data << repost.repostable
+    end
+    return new_data
+  end
 
   def repost_params
     params[:repost][:repostable_type].capitalize!
