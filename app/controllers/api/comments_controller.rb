@@ -1,5 +1,7 @@
 class Api::CommentsController < Api::BaseController
 
+  include PostInfoController
+
   def index
     if params[:post_id] and params[:user_id]
       @comments = User.find_by_handle(params[:user_id]).posts.limit(params[:post_id].to_i).last.comments
@@ -12,13 +14,13 @@ class Api::CommentsController < Api::BaseController
     elsif params[:user_id]
       @comments = get_user.comments
     end
-    render json: {data: include_comment_info(@comments, "index")}, status: :ok
+    render json: {data: include_post_info(@comments, "index")}, status: :ok
   end
 
   def create
     @comment = current_user.comments.build(comment_params)
     if @comment.save
-      render json: {data: include_comment_info(@comment)}, status: :ok
+      render json: {data: include_post_info(@comment)}, status: :ok
     end
   end
 
@@ -28,7 +30,7 @@ class Api::CommentsController < Api::BaseController
     else
       @comment = Comment.find(params[:id])
     end
-    render json: {data: include_comment_info(@comment)}, status: :ok
+    render json: {data: include_post_info(@comment)}, status: :ok
   end
 
   def destroy
@@ -43,17 +45,6 @@ class Api::CommentsController < Api::BaseController
   end
 
   private
-
-  def include_comment_info(data, action = nil)
-    if action == "index"
-      data.each do |comment|
-        comment.uid = current_user.id
-      end
-    else
-      data.uid = current_user.id
-    end
-    return data.as_json(methods: [:user_name, :user_handle, :comment_count, :commented, :like_count, :like_id, :user_post_id, :repost_count, :reposted])
-  end
 
   def get_post
     @post = Post.find(params[:post_id])

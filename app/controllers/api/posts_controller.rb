@@ -1,6 +1,7 @@
 class Api::PostsController < Api::BaseController
 
   before_action :get_user, only: [:index, :show, :create, :destroy]
+  include PostInfoController
 
   def index
     if params[:include_followees] && @user.id == current_user.id
@@ -48,21 +49,6 @@ class Api::PostsController < Api::BaseController
   end
 
   private
-
-  def include_post_info(data, like_id = nil)
-    if like_id
-      if like_id == "index"
-        data.each do |post|
-          post.uid = current_user.id
-        end
-      else
-        data.uid = current_user.id
-      end
-      return data.as_json(methods: [:user_name, :user_handle, :comment_count, :commented, :like_count, :like_id, :user_post_id, :repost_count, :reposted])
-    else
-      return data.as_json(methods: [:user_name, :user_handle, :comment_count, :commented, :like_count])
-    end
-  end
 
   def get_user
     @user = User.find_by_handle(params[:user_id])
