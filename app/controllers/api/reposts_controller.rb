@@ -22,6 +22,14 @@ class Api::RepostsController < Api::BaseController
   end
 
   def destroy
+    @repost = Repost.find(params[:id])
+    if @repost.user_id == current_user.id
+      if @repost.destroy
+        render json: {data: @repost}, status: :ok
+      end
+    else
+      render json: {title: 'Unauthorized'}, status: 401
+    end
   end
 
   private

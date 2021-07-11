@@ -157,4 +157,42 @@ describe Api::RepostsController, type: :request do
       expect(json['repost'][3]['user_id']).to be(user.id)
     end
   end
+
+  context 'When deleting a repost' do
+    before do
+      login_with_api(user)
+      @post = create_post(create_user)
+      @repost = create_repost(user, @post)
+
+      delete "/api/reposts/#{@repost.id}", headers: {
+        'Authorization': response.headers['Authorization']
+      }
+    end
+
+    it 'returns 200' do
+      expect(response.status).to eq(200)
+    end
+
+    it 'returns the deleted repost' do
+      expect(json['data']['user_id']).to be(user.id)
+      expect(json['data']['repostable_id']).to be(@post.id)
+      expect(json['data']['repostable_type']).to eq("Post")
+    end
+  end
+
+  context 'When trying to delete another user\'s repost' do
+    before do
+      login_with_api(user)
+      @post = create_post(user)
+      @repost = create_repost(create_user, @post)
+
+      delete "/api/reposts/#{@repost.id}", headers: {
+        'Authorization': response.headers['Authorization']
+      }
+    end
+
+    it 'returns 401' do
+      expect(response.status).to eq(401)
+    end
+  end
 end
