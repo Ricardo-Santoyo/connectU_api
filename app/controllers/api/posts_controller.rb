@@ -58,7 +58,7 @@ class Api::PostsController < Api::BaseController
       else
         data.uid = current_user.id
       end
-      return data.as_json(methods: [:user_name, :user_handle, :comment_count, :commented, :like_count, :like_id, :user_post_id])
+      return data.as_json(methods: [:user_name, :user_handle, :comment_count, :commented, :like_count, :like_id, :user_post_id, :repost_count, :reposted])
     else
       return data.as_json(methods: [:user_name, :user_handle, :comment_count, :commented, :like_count])
     end

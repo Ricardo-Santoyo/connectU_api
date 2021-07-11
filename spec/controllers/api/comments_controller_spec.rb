@@ -111,6 +111,8 @@ describe Api::CommentsController, type: :request do
       expect(json['data'][3]['user_handle']).to eq(user.handle)
       expect(json['data'][3]['comment_count']).to be(0)
       expect(json['data'][3]['commented']).to eq(false)
+      expect(json['data'][3]['repost_count']).to be(0)
+      expect(json['data'][3]['reposted']).to be(false)
       expect(json['data'][3]['like_count']).to be(1)
       expect(json['data'][3]['like_id']).to be(@like.id)
     end

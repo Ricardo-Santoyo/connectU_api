@@ -32,4 +32,12 @@ module PostInfo
   def user_post_id
     return self.user.posts.find_index(self) + 1
   end
+
+  def repost_count
+    return self.reposts.count
+  end
+
+  def reposted
+    return self.reposts.exists?(user_id:uid)
+  end
 end

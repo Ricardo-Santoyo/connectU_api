@@ -35,6 +35,8 @@ describe Api::RepostsController, type: :request do
       expect(json['data']['user_handle']).to eq(@user2.handle)
       expect(json['data']['comment_count']).to be(0)
       expect(json['data']['commented']).to eq(false)
+      expect(json['data']['repost_count']).to be(1)
+      expect(json['data']['reposted']).to be(true)
       expect(json['data']['like_count']).to be(0)
       expect(json['data']['like_id']).to be(nil)
     end
