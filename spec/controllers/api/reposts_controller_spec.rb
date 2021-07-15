@@ -36,7 +36,7 @@ describe Api::RepostsController, type: :request do
       expect(json['data']['comment_count']).to be(0)
       expect(json['data']['commented']).to eq(false)
       expect(json['data']['repost_count']).to be(1)
-      expect(json['data']['reposted']).to be(true)
+      expect(json['data']['repost_id']).to be(json['repost']['id'])
       expect(json['data']['like_count']).to be(0)
       expect(json['data']['like_id']).to be(nil)
     end
@@ -46,7 +46,7 @@ describe Api::RepostsController, type: :request do
     before :each do
       create_repost(create_user, create_post(user))
       create_repost(user, create_post(user))
-      create_repost(user, create_post(user))
+      @repost = create_repost(user, create_post(user))
       create_repost(user, create_post(user))
       login_with_api(user)
       get "/api/reposts", headers: {
@@ -66,7 +66,7 @@ describe Api::RepostsController, type: :request do
       expect(json['data'][1]['user_handle']).to eq(user.handle)
       expect(json['data'][1]['comment_count']).to be(0)
       expect(json['data'][1]['repost_count']).to be(1)
-      expect(json['data'][1]['reposted']).to be(true)
+      expect(json['data'][1]['repost_id']).to be(@repost.id)
       expect(json['data'][1]['like_count']).to be(0)
       expect(json['data'][1]['like_id']).to be(nil)
       expect(json['data'][0]['user_id']).to be(user.id)
@@ -102,7 +102,7 @@ describe Api::RepostsController, type: :request do
       expect(json['data'][1]['user_handle']).to eq(user.handle)
       expect(json['data'][1]['comment_count']).to be(0)
       expect(json['data'][1]['repost_count']).to be(1)
-      expect(json['data'][1]['reposted']).to be(false)
+      expect(json['data'][1]['repost_id']).to be(nil)
       expect(json['data'][1]['like_count']).to be(0)
       expect(json['data'][1]['like_id']).to be(nil)
       expect(json['data'][0]['user_id']).to be(user.id)
@@ -116,7 +116,7 @@ describe Api::RepostsController, type: :request do
     before :each do
       @user2 = create_user
       user.following.create(person_id:@user2.id)
-      create_repost(user, create_post(user))
+      @repost = create_repost(user, create_post(user))
       create_repost(@user2, create_post(user))
       create_repost(user, create_post(@user2))
       create_repost(user, create_post(user))
@@ -142,7 +142,7 @@ describe Api::RepostsController, type: :request do
       expect(json['data'][3]['commented']).to eq(false)
       expect(json['data'][3]['like_count']).to be(0)
       expect(json['data'][3]['repost_count']).to be(1)
-      expect(json['data'][3]['reposted']).to be(true)
+      expect(json['data'][3]['repost_id']).to be(@repost.id)
       expect(json['data'][0]['user_name']).to eq(user.name)
       expect(json['data'][1]['user_name']).to eq(@user2.name)
       expect(json['data'][2]['user_name']).to eq(user.name)
@@ -177,6 +177,7 @@ describe Api::RepostsController, type: :request do
       expect(json['data']['user_id']).to be(user.id)
       expect(json['data']['repostable_id']).to be(@post.id)
       expect(json['data']['repostable_type']).to eq("Post")
+      expect(json['data']['id']).to be(@repost.id)
     end
   end
 

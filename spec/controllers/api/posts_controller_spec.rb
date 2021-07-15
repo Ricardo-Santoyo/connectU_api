@@ -282,7 +282,7 @@ describe Api::PostsController, type: :request do
       expect(json['data']['user_id']).to be(@user2.id)
       expect(json['data']['comment_count']).to be(0)
       expect(json['data']['repost_count']).to be(0)
-      expect(json['data']['reposted']).to be(false)
+      expect(json['data']['repost_id']).to be(nil)
       expect(json['data']['like_count']).to be(0)
       expect(json['data']['like_id']).to be(nil)
       expect(json['data']['body']).to eq(@post.body)

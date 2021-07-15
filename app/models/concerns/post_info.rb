@@ -37,7 +37,7 @@ module PostInfo
     return self.reposts.count
   end
 
-  def reposted
-    return self.reposts.exists?(user_id:uid)
+  def repost_id
+    return self.reposts.where(user_id:uid).ids.first
   end
 end
