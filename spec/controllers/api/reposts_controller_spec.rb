@@ -13,10 +13,8 @@ describe Api::RepostsController, type: :request do
       post "/api/reposts", headers: {
         'Authorization': response.headers['Authorization']
       }, params: {
-        repost: {
-          repostable_type: "post",
-          repostable_id: @post.id,
-        }
+        repostable_type: "post",
+        repostable_id: @post.id,
       }
     end
 

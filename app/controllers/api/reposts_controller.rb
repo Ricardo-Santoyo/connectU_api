@@ -47,7 +47,7 @@ class Api::RepostsController < Api::BaseController
   end
 
   def repost_params
-    params[:repost][:repostable_type].capitalize!
-    params.require(:repost).permit(:body, :repostable_type, :repostable_id)
+    params[:repostable_type].capitalize!
+    params.permit(:repostable_type, :repostable_id)
   end
 end
