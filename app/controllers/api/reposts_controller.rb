@@ -15,7 +15,7 @@ class Api::RepostsController < Api::BaseController
   end
 
   def create
-    @repost = current_user.reposts.build(repost_params)
+    @repost = current_user.reposts.build(repostable_type: params[:type].capitalize, repostable_id: params[:repostable_id])
     if @repost.save
       render json: {repost: get_repost_info(@repost), data: include_post_info(@repost.repostable) }
     end
@@ -44,10 +44,5 @@ class Api::RepostsController < Api::BaseController
       new_data << repost.repostable
     end
     return new_data
-  end
-
-  def repost_params
-    params[:repostable_type].capitalize!
-    params.permit(:repostable_type, :repostable_id)
   end
 end
