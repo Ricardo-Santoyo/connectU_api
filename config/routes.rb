@@ -13,6 +13,8 @@ Rails.application.routes.draw do
     resources :reposts, only: [:index, :create, :destroy]
 
     resources :following, only: [:create, :destroy]
+
+    resources :bookmarks, only: [:index, :create, :destroy]
   end
 
   devise_for :users,
