@@ -15,6 +15,17 @@ class Api::BookmarksController < Api::BaseController
     end
   end
 
+  def destroy
+    @bookmark = Bookmark.find(params[:id])
+    if @bookmark.user_id == current_user.id
+      if @bookmark.destroy
+        render json: {data: @bookmark}, status: :ok
+      end
+    else
+      render json: {title: 'Unauthorized'}, status: 401
+    end
+  end
+
   private
 
   def get_posts(data)

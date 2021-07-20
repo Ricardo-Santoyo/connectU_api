@@ -73,4 +73,27 @@ describe Api::BookmarksController, type: :request do
       expect(json['data'][2]['user_id']).to be(user.id)
     end
   end
+
+  context 'When deleting a bookmark' do
+    before do
+      login_with_api(user)
+      @post = create_post(create_user)
+      @bookmark = create_bookmark(user, @post)
+
+      delete "/api/bookmarks/#{@bookmark.id}", headers: {
+        'Authorization': response.headers['Authorization']
+      }
+    end
+
+    it 'returns 200' do
+      expect(response.status).to eq(200)
+    end
+
+    it 'returns the deleted bookmark' do
+      expect(json['data']['user_id']).to be(user.id)
+      expect(json['data']['bookmarkable_id']).to be(@post.id)
+      expect(json['data']['bookmarkable_type']).to eq("Post")
+      expect(json['data']['id']).to be(@bookmark.id)
+    end
+  end
 end
