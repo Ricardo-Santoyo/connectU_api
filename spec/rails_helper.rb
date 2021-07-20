@@ -76,6 +76,8 @@ RSpec.configure do |config|
 
   config.include LikeHelpers
 
+  config.include BookmarkHelpers
+
   config.include FollowerFolloweeHelpers
 
   config.include ApiHelpers
