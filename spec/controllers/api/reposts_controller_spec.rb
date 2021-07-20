@@ -37,6 +37,7 @@ describe Api::RepostsController, type: :request do
       expect(json['data']['repost_id']).to be(json['repost']['id'])
       expect(json['data']['like_count']).to be(0)
       expect(json['data']['like_id']).to be(nil)
+      expect(json['data']['bookmark_id']).to be(nil)
     end
   end
 

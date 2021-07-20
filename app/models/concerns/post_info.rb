@@ -40,4 +40,8 @@ module PostInfo
   def repost_id
     return self.reposts.where(user_id:uid).ids.first
   end
+
+  def bookmark_id
+    return self.bookmarks.where(user_id:uid).ids.first
+  end
 end

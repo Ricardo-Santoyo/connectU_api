@@ -3,4 +3,6 @@ class Bookmark < ApplicationRecord
   validates_uniqueness_of :user_id, scope: :bookmarkable
   belongs_to :user
   belongs_to :bookmarkable, polymorphic: true
+
+  include PostInfo
 end
